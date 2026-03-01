@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Great Mid-Decade Redistricting | 2026</title>
+
+  <!-- ArcGIS Maps SDK for JavaScript 5.0 (includes Calcite + all components) -->
+  <script type="module" src="https://js.arcgis.com/5.0/"></script>
+  <link rel="stylesheet" href="https://js.arcgis.com/5.0/esri/themes/dark/main.css" />
+
+  <!-- App styles -->
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="calcite-mode-dark">
+
+  <calcite-shell>
+
+    <!-- ===== HEADER ===== -->
+    <calcite-navigation slot="header">
+      <calcite-navigation-logo
+        slot="logo"
+        heading="The Great Mid-Decade Redistricting"
+        description="How 2026 map redraws reshape American politics"
+        icon="political-boundaries"
+      ></calcite-navigation-logo>
+      <calcite-action-group slot="content-end">
+        <calcite-action id="btn-info" text="About" icon="information"></calcite-action>
+      </calcite-action-group>
+    </calcite-navigation>
+
+    <!-- ===== LEFT PANEL ===== -->
+    <calcite-shell-panel slot="panel-start" width-scale="m" id="left-panel">
+      <calcite-action-bar slot="action-bar" id="action-bar">
+        <calcite-action data-action-id="states" icon="globe" text="Focus States"></calcite-action>
+        <calcite-action data-action-id="layers" icon="layers" text="Layers"></calcite-action>
+        <calcite-action data-action-id="legend" icon="legend" text="Legend"></calcite-action>
+      </calcite-action-bar>
+
+      <!-- States Panel -->
+      <calcite-panel id="states-panel" heading="Focus States" data-panel-id="states">
+        <calcite-block heading="Navigate to State" open collapsible>
+          <calcite-icon slot="icon" icon="pin"></calcite-icon>
+          <div class="state-nav">
+            <calcite-button id="btn-ca" appearance="outline-fill" icon-start="map-pin" width="full">California</calcite-button>
+            <calcite-button id="btn-tx" appearance="outline-fill" icon-start="map-pin" width="full">Texas</calcite-button>
+            <calcite-button id="btn-nc" appearance="outline-fill" icon-start="map-pin" width="full">North Carolina</calcite-button>
+            <calcite-button id="btn-usa" appearance="outline" icon-start="home" width="full" kind="neutral">Reset to USA</calcite-button>
+          </div>
+        </calcite-block>
+
+        <calcite-block heading="California (Prop 50)" collapsible>
+          <calcite-icon slot="icon" icon="exclamation-mark-triangle" style="color: var(--calcite-color-status-warning);"></calcite-icon>
+          <p class="info-text">The new legislature-drawn map aims to shift House control by redrawing liberal and conservative strongholds. Prop 50 bypassed the independent redistricting commission, returning map-drawing power to the state legislature for the first time since 2010.</p>
+          <calcite-chip appearance="outline-fill" kind="brand" icon="cursor-click" id="chip-ca-hotspot">View CA Hotspot</calcite-chip>
+        </calcite-block>
+
+        <calcite-block heading="Texas" collapsible>
+          <calcite-icon slot="icon" icon="exclamation-mark-triangle" style="color: var(--calcite-color-status-danger);"></calcite-icon>
+          <p class="info-text">Recent redraws have significantly favored Republicans, sparking intense legal battles. Suburban districts around Houston and Dallas-Fort Worth have seen the most dramatic shifts, with incumbent Democrats drawn out of their districts.</p>
+          <calcite-chip appearance="outline-fill" kind="brand" icon="cursor-click" id="chip-tx-hotspot">View TX Hotspot</calcite-chip>
+        </calcite-block>
+
+        <calcite-block heading="North Carolina" collapsible>
+          <calcite-icon slot="icon" icon="exclamation-mark-triangle" style="color: var(--calcite-color-status-danger);"></calcite-icon>
+          <p class="info-text">The NC Supreme Court reversed its own precedent, allowing partisan gerrymandering. The new maps pack Democratic voters into fewer districts while spreading Republican voters efficiently across the remaining seats.</p>
+          <calcite-chip appearance="outline-fill" kind="brand" icon="cursor-click" id="chip-nc-hotspot">View NC Hotspot</calcite-chip>
+        </calcite-block>
+      </calcite-panel>
+
+      <!-- Layers Panel -->
+      <calcite-panel id="layers-panel" heading="Map Layers" data-panel-id="layers" hidden>
+        <calcite-block heading="District Layers" open collapsible>
+          <calcite-icon slot="icon" icon="layers"></calcite-icon>
+          <calcite-label layout="inline-space-between">
+            Congressional Districts
+            <calcite-switch id="toggle-districts" checked></calcite-switch>
+          </calcite-label>
+          <calcite-label layout="inline-space-between">
+            State Boundaries
+            <calcite-switch id="toggle-states" checked></calcite-switch>
+          </calcite-label>
+        </calcite-block>
+        <calcite-block heading="Basemap" open collapsible>
+          <calcite-icon slot="icon" icon="basemap"></calcite-icon>
+          <calcite-segmented-control id="basemap-toggle" width="full">
+            <calcite-segmented-control-item value="dark-gray-vector" checked>Dark</calcite-segmented-control-item>
+            <calcite-segmented-control-item value="streets-night-vector">Streets</calcite-segmented-control-item>
+            <calcite-segmented-control-item value="satellite">Satellite</calcite-segmented-control-item>
+          </calcite-segmented-control>
+        </calcite-block>
+        <calcite-block heading="District Opacity" open collapsible>
+          <calcite-icon slot="icon" icon="brightness"></calcite-icon>
+          <calcite-slider id="opacity-slider" min="0" max="100" value="70" step="5" label-handles></calcite-slider>
+        </calcite-block>
+      </calcite-panel>
+
+      <!-- Legend Panel -->
+      <calcite-panel id="legend-panel" heading="Legend" data-panel-id="legend" hidden>
+        <calcite-block heading="Party Lean" open>
+          <calcite-icon slot="icon" icon="legend"></calcite-icon>
+          <div class="legend-items">
+            <div class="legend-row"><span class="legend-swatch" style="background:#2166ac;"></span> Strong Democrat (D+15 or more)</div>
+            <div class="legend-row"><span class="legend-swatch" style="background:#67a9cf;"></span> Lean Democrat (D+5 to D+15)</div>
+            <div class="legend-row"><span class="legend-swatch" style="background:#d1e5f0;"></span> Tilt Democrat (D+0 to D+5)</div>
+            <div class="legend-row"><span class="legend-swatch" style="background:#f7f7f7;"></span> Toss-up</div>
+            <div class="legend-row"><span class="legend-swatch" style="background:#fddbc7;"></span> Tilt Republican (R+0 to R+5)</div>
+            <div class="legend-row"><span class="legend-swatch" style="background:#ef8a62;"></span> Lean Republican (R+5 to R+15)</div>
+            <div class="legend-row"><span class="legend-swatch" style="background:#b2182b;"></span> Strong Republican (R+15 or more)</div>
+          </div>
+        </calcite-block>
+        <calcite-block heading="Boundary Types" open>
+          <div class="legend-items">
+            <div class="legend-row"><span class="legend-line" style="border-color:#fff;"></span> District Boundary</div>
+            <div class="legend-row"><span class="legend-line" style="border-color:#ffd700; border-style:dashed;"></span> Contested Boundary</div>
+          </div>
+        </calcite-block>
+      </calcite-panel>
+    </calcite-shell-panel>
+
+    <!-- ===== MAP ===== -->
+    <div id="viewDiv"></div>
+
+    <!-- ===== RIGHT PANEL (District Detail) ===== -->
+    <calcite-shell-panel slot="panel-end" width-scale="s" id="right-panel" collapsed>
+      <calcite-panel heading="District Detail" id="detail-panel" closable>
+        <div id="detail-content">
+          <p class="info-text muted">Click a district on the map to see details.</p>
+        </div>
+      </calcite-panel>
+    </calcite-shell-panel>
+
+  </calcite-shell>
+
+  <!-- ===== ABOUT MODAL ===== -->
+  <calcite-dialog id="about-dialog" heading="About This Map" kind="brand" modal>
+    <div class="about-content">
+      <h3>The Great Mid-Decade Redistricting of 2026</h3>
+      <p>In an unusual move for 2026, several U.S. states are redrawing their congressional maps mid-decade. This interactive map visualizes how redistricting reshapes political representation at every scale, from statewide overviews down to individual streets.</p>
+
+      <calcite-notice open icon="lightbulb">
+        <span slot="title">Why it matters</span>
+        <span slot="message">A single street-level change in a district boundary can flip a district's political leaning, affecting representation for hundreds of thousands of people.</span>
+      </calcite-notice>
+
+      <h4>Key States</h4>
+      <ul>
+        <li><strong>California (Prop 50)</strong> &mdash; Legislature-drawn map aims to shift House control</li>
+        <li><strong>Texas</strong> &mdash; Redraws favor Republicans, sparking legal battles</li>
+        <li><strong>North Carolina</strong> &mdash; Reversed precedent enables partisan gerrymandering</li>
+      </ul>
+
+      <h4>How to Use</h4>
+      <ul>
+        <li>Click state buttons to zoom to focus areas</li>
+        <li>Click any district for demographic and political details</li>
+        <li>Zoom to street level to see boundary precision</li>
+        <li>Toggle layers and adjust opacity in the Layers panel</li>
+      </ul>
+
+      <p class="muted">Data: Esri Living Atlas, U.S. Census Bureau | Built with ArcGIS Maps SDK for JavaScript 5.0</p>
+    </div>
+    <calcite-button slot="footer-end" appearance="outline-fill" icon-start="x" id="close-about">Close</calcite-button>
+  </calcite-dialog>
+
+  <!-- ===== STREET-LEVEL TOOLTIP ===== -->
+  <div id="street-notice" class="street-notice" hidden>
+    <calcite-notice open kind="warning" icon="zoom-in-fixed" scale="s" closable>
+      <span slot="title">Street-Level Boundary</span>
+      <span slot="message">You are viewing a district boundary at street level. A shift of this line by one block could move thousands of voters between districts.</span>
+    </calcite-notice>
+  </div>
+
+  <!-- App logic -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
