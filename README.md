@@ -1,5 +1,7 @@
 # The Great Mid-Decade Redistricting
 
+**[Live Demo](https://garridolecca.github.io/The-Great-Mid-Decade-Redistricting/)**
+
 Interactive map application visualizing the 2026 mid-decade congressional redistricting in the United States.
 
 ## Overview
