@@ -24,6 +24,11 @@
         description="How 2026 map redraws reshape American politics"
         icon="political-boundaries"
       ></calcite-navigation-logo>
+      <div slot="content-end" class="header-stats">
+        <calcite-chip scale="s" icon="map" kind="neutral" appearance="outline-fill">3 States</calcite-chip>
+        <calcite-chip scale="s" icon="urban-model" kind="neutral" appearance="outline-fill">104 Districts</calcite-chip>
+        <calcite-chip scale="s" icon="exclamation-mark-triangle" kind="warning" appearance="outline-fill">9-13 Seats at Stake</calcite-chip>
+      </div>
       <calcite-action-group slot="content-end">
         <calcite-action id="btn-info" text="About" icon="information"></calcite-action>
       </calcite-action-group>
@@ -32,13 +37,43 @@
     <!-- ===== LEFT PANEL ===== -->
     <calcite-shell-panel slot="panel-start" width-scale="m" id="left-panel">
       <calcite-action-bar slot="action-bar" id="action-bar">
+        <calcite-action data-action-id="tour" icon="tour" text="Guided Tour"></calcite-action>
         <calcite-action data-action-id="states" icon="globe" text="Focus States"></calcite-action>
+        <calcite-action data-action-id="learn" icon="book" text="Learn"></calcite-action>
         <calcite-action data-action-id="layers" icon="layers" text="Layers"></calcite-action>
         <calcite-action data-action-id="legend" icon="legend" text="Legend"></calcite-action>
       </calcite-action-bar>
 
-      <!-- States Panel -->
-      <calcite-panel id="states-panel" heading="Focus States" data-panel-id="states">
+      <!-- ===== TOUR PANEL ===== -->
+      <calcite-panel id="tour-panel" heading="Guided Tour" data-panel-id="tour">
+        <calcite-action slot="header-actions-end" id="btn-tour-close" icon="x" text="Exit Tour"></calcite-action>
+
+        <div id="tour-content">
+          <div class="tour-intro">
+            <calcite-icon icon="tour" scale="l"></calcite-icon>
+            <h3>Explore the 2026 Redistricting</h3>
+            <p class="info-text">Take a 9-step guided tour through the most consequential mid-decade redistricting in modern American history. See how boundary changes in California, Texas, and North Carolina could flip control of Congress.</p>
+            <calcite-button id="btn-start-tour" width="full" icon-start="play" kind="brand" appearance="solid">
+              Start Guided Tour
+            </calcite-button>
+          </div>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="tour-progress-track" id="tour-progress-track" hidden>
+          <div class="tour-progress-fill" id="tour-progress-bar"></div>
+        </div>
+
+        <!-- Navigation footer -->
+        <div class="tour-nav" id="tour-nav" slot="footer" hidden>
+          <calcite-button id="btn-tour-prev" icon-start="chevron-left" appearance="outline" disabled>Back</calcite-button>
+          <span id="tour-step-label" class="tour-step-label">1 / 9</span>
+          <calcite-button id="btn-tour-next" icon-end="chevron-right" appearance="solid" kind="brand">Next</calcite-button>
+        </div>
+      </calcite-panel>
+
+      <!-- ===== STATES PANEL ===== -->
+      <calcite-panel id="states-panel" heading="Focus States" data-panel-id="states" hidden>
         <calcite-block heading="Navigate to State" open collapsible>
           <calcite-icon slot="icon" icon="pin"></calcite-icon>
           <div class="state-nav">
@@ -51,24 +86,116 @@
 
         <calcite-block heading="California (Prop 50)" collapsible>
           <calcite-icon slot="icon" icon="exclamation-mark-triangle" style="color: var(--calcite-color-status-warning);"></calcite-icon>
-          <p class="info-text">The new legislature-drawn map aims to shift House control by redrawing liberal and conservative strongholds. Prop 50 bypassed the independent redistricting commission, returning map-drawing power to the state legislature for the first time since 2010.</p>
-          <calcite-chip appearance="outline-fill" kind="brand" icon="cursor-click" id="chip-ca-hotspot">View CA Hotspot</calcite-chip>
+          <p class="info-text">Prop 50 bypassed the independent redistricting commission, returning map-drawing power to the state legislature. The Democratic supermajority aims to gain 4-6 additional House seats by redrawing liberal and conservative strongholds.</p>
+          <div class="state-stats">
+            <div class="mini-stat"><span class="mini-value">52</span><span class="mini-label">Districts</span></div>
+            <div class="mini-stat"><span class="mini-value dem">4-6</span><span class="mini-label">Seats at Stake</span></div>
+            <div class="mini-stat"><span class="mini-value">2.1M</span><span class="mini-label">Voters Affected</span></div>
+          </div>
+          <calcite-chip appearance="outline-fill" kind="brand" icon="cursor-click" id="chip-ca-hotspot">View LA Hotspot</calcite-chip>
         </calcite-block>
 
         <calcite-block heading="Texas" collapsible>
           <calcite-icon slot="icon" icon="exclamation-mark-triangle" style="color: var(--calcite-color-status-danger);"></calcite-icon>
-          <p class="info-text">Recent redraws have significantly favored Republicans, sparking intense legal battles. Suburban districts around Houston and Dallas-Fort Worth have seen the most dramatic shifts, with incumbent Democrats drawn out of their districts.</p>
-          <calcite-chip appearance="outline-fill" kind="brand" icon="cursor-click" id="chip-tx-hotspot">View TX Hotspot</calcite-chip>
+          <p class="info-text">Texas Republicans used trifecta control to redraw maps mid-cycle, targeting suburban districts around Houston and Dallas-Fort Worth that had been trending Democratic. At least 3 incumbent Democrats were drawn out of their seats.</p>
+          <div class="state-stats">
+            <div class="mini-stat"><span class="mini-value">38</span><span class="mini-label">Districts</span></div>
+            <div class="mini-stat"><span class="mini-value rep">3-4</span><span class="mini-label">Seats at Stake</span></div>
+            <div class="mini-stat"><span class="mini-value">1.8M</span><span class="mini-label">Voters Affected</span></div>
+          </div>
+          <calcite-chip appearance="outline-fill" kind="brand" icon="cursor-click" id="chip-tx-hotspot">View Houston Hotspot</calcite-chip>
         </calcite-block>
 
         <calcite-block heading="North Carolina" collapsible>
           <calcite-icon slot="icon" icon="exclamation-mark-triangle" style="color: var(--calcite-color-status-danger);"></calcite-icon>
-          <p class="info-text">The NC Supreme Court reversed its own precedent, allowing partisan gerrymandering. The new maps pack Democratic voters into fewer districts while spreading Republican voters efficiently across the remaining seats.</p>
-          <calcite-chip appearance="outline-fill" kind="brand" icon="cursor-click" id="chip-nc-hotspot">View NC Hotspot</calcite-chip>
+          <p class="info-text">The NC Supreme Court reversed its own precedent, allowing partisan gerrymandering. New maps pack Democratic voters into fewer districts while spreading Republican voters efficiently across the remaining seats.</p>
+          <div class="state-stats">
+            <div class="mini-stat"><span class="mini-value">14</span><span class="mini-label">Districts</span></div>
+            <div class="mini-stat"><span class="mini-value rep">2-3</span><span class="mini-label">Seats at Stake</span></div>
+            <div class="mini-stat"><span class="mini-value">890K</span><span class="mini-label">Voters Affected</span></div>
+          </div>
+          <calcite-chip appearance="outline-fill" kind="brand" icon="cursor-click" id="chip-nc-hotspot">View Raleigh Hotspot</calcite-chip>
         </calcite-block>
       </calcite-panel>
 
-      <!-- Layers Panel -->
+      <!-- ===== LEARN PANEL ===== -->
+      <calcite-panel id="learn-panel" heading="Learn: Redistricting" data-panel-id="learn" hidden>
+        <calcite-block heading="What Is Redistricting?" open collapsible>
+          <calcite-icon slot="icon" icon="question"></calcite-icon>
+          <p class="info-text">Redistricting is the process of redrawing congressional district boundaries. It typically happens every 10 years after the Census to reflect population changes.</p>
+          <p class="info-text">Each district must contain roughly equal population (~760,000 people). <strong>How</strong> those lines are drawn determines which communities are grouped together and which party's voters have the majority.</p>
+          <p class="info-text">Mid-decade redistricting &mdash; like what's happening in 2026 &mdash; is rare and deeply controversial.</p>
+        </calcite-block>
+
+        <calcite-block heading="What Is Gerrymandering?" collapsible>
+          <calcite-icon slot="icon" icon="exclamation-mark-triangle"></calcite-icon>
+          <p class="info-text">Gerrymandering is the manipulation of district boundaries for political advantage. Named after Massachusetts Governor Elbridge Gerry in 1812, it remains one of the most powerful tools in American politics.</p>
+          <p class="info-text">The party that controls the state legislature typically draws the maps &mdash; and can draw them to entrench their own power for a decade.</p>
+        </calcite-block>
+
+        <calcite-block heading="Packing vs. Cracking" collapsible>
+          <calcite-icon slot="icon" icon="compare"></calcite-icon>
+          <p class="info-text" style="font-weight:600;">Two core gerrymandering strategies:</p>
+
+          <div class="diagram-section">
+            <h4 class="diagram-label">Packing</h4>
+            <p class="info-text">Concentrate opposing voters into one district so they "waste" votes on an overwhelming victory.</p>
+            <div class="grid-diagram">
+              <div class="grid-label">District A (Packed)</div>
+              <div class="grid-row">
+                <div class="grid-cell blue"></div><div class="grid-cell blue"></div>
+                <div class="grid-cell blue"></div><div class="grid-cell blue"></div>
+                <div class="grid-cell blue"></div>
+              </div>
+              <div class="grid-label">District B</div>
+              <div class="grid-row">
+                <div class="grid-cell red"></div><div class="grid-cell red"></div>
+                <div class="grid-cell red"></div><div class="grid-cell blue"></div>
+                <div class="grid-cell blue"></div>
+              </div>
+            </div>
+            <p class="diagram-caption">Blue wins District A with 5-0 (wasted votes). Red wins District B with 3-2.</p>
+          </div>
+
+          <div class="diagram-section">
+            <h4 class="diagram-label">Cracking</h4>
+            <p class="info-text">Split opposing voters across multiple districts so they never form a majority.</p>
+            <div class="grid-diagram">
+              <div class="grid-label">District A</div>
+              <div class="grid-row">
+                <div class="grid-cell red"></div><div class="grid-cell red"></div>
+                <div class="grid-cell red"></div><div class="grid-cell blue"></div>
+                <div class="grid-cell blue"></div>
+              </div>
+              <div class="grid-label">District B</div>
+              <div class="grid-row">
+                <div class="grid-cell red"></div><div class="grid-cell red"></div>
+                <div class="grid-cell red"></div><div class="grid-cell blue"></div>
+                <div class="grid-cell blue"></div>
+              </div>
+            </div>
+            <p class="diagram-caption">Blue voters are split 2-2 across districts, never reaching a 3-vote majority. Red wins both.</p>
+          </div>
+        </calcite-block>
+
+        <calcite-block heading="Why Mid-Decade?" collapsible>
+          <calcite-icon slot="icon" icon="clock"></calcite-icon>
+          <p class="info-text">Redistricting normally happens after each decennial Census (2010, 2020, 2030). Mid-decade redistricting is rare &mdash; the last major one was Texas in 2003.</p>
+          <p class="info-text">The 2026 cases are driven by political opportunity: parties that gained state-level power after 2024 elections are using that power to redraw maps before the next Census in 2030.</p>
+        </calcite-block>
+
+        <calcite-block heading="The Legal Landscape" collapsible>
+          <calcite-icon slot="icon" icon="gavel"></calcite-icon>
+          <p class="info-text">The Supreme Court ruled in <em>Rucho v. Common Cause</em> (2019) that federal courts cannot hear partisan gerrymandering claims. This leaves challenges to state courts, which have produced contradictory results.</p>
+          <p class="info-text">North Carolina's state supreme court reversed its own precedent in just 2 years after its partisan composition changed.</p>
+          <calcite-notice open kind="warning" icon="exclamation-mark-triangle" scale="s">
+            <span slot="title">Active Litigation</span>
+            <span slot="message">Lawsuits are pending in all three focus states. Outcomes could reshape maps again before the 2026 midterms.</span>
+          </calcite-notice>
+        </calcite-block>
+      </calcite-panel>
+
+      <!-- ===== LAYERS PANEL ===== -->
       <calcite-panel id="layers-panel" heading="Map Layers" data-panel-id="layers" hidden>
         <calcite-block heading="District Layers" open collapsible>
           <calcite-icon slot="icon" icon="layers"></calcite-icon>
@@ -77,8 +204,8 @@
             <calcite-switch id="toggle-districts" checked></calcite-switch>
           </calcite-label>
           <calcite-label layout="inline-space-between">
-            State Boundaries
-            <calcite-switch id="toggle-states" checked></calcite-switch>
+            Contested Boundaries
+            <calcite-switch id="toggle-contested" checked></calcite-switch>
           </calcite-label>
         </calcite-block>
         <calcite-block heading="Basemap" open collapsible>
@@ -91,11 +218,11 @@
         </calcite-block>
         <calcite-block heading="District Opacity" open collapsible>
           <calcite-icon slot="icon" icon="brightness"></calcite-icon>
-          <calcite-slider id="opacity-slider" min="0" max="100" value="70" step="5" label-handles></calcite-slider>
+          <calcite-slider id="opacity-slider" min="0" max="100" value="75" step="5" label-handles></calcite-slider>
         </calcite-block>
       </calcite-panel>
 
-      <!-- Legend Panel -->
+      <!-- ===== LEGEND PANEL ===== -->
       <calcite-panel id="legend-panel" heading="Legend" data-panel-id="legend" hidden>
         <calcite-block heading="Party Lean" open>
           <calcite-icon slot="icon" icon="legend"></calcite-icon>
@@ -103,7 +230,7 @@
             <div class="legend-row"><span class="legend-swatch" style="background:#2166ac;"></span> Strong Democrat (D+15 or more)</div>
             <div class="legend-row"><span class="legend-swatch" style="background:#67a9cf;"></span> Lean Democrat (D+5 to D+15)</div>
             <div class="legend-row"><span class="legend-swatch" style="background:#d1e5f0;"></span> Tilt Democrat (D+0 to D+5)</div>
-            <div class="legend-row"><span class="legend-swatch" style="background:#f7f7f7;"></span> Toss-up</div>
+            <div class="legend-row"><span class="legend-swatch" style="background:#c8c8c8;"></span> Toss-up</div>
             <div class="legend-row"><span class="legend-swatch" style="background:#fddbc7;"></span> Tilt Republican (R+0 to R+5)</div>
             <div class="legend-row"><span class="legend-swatch" style="background:#ef8a62;"></span> Lean Republican (R+5 to R+15)</div>
             <div class="legend-row"><span class="legend-swatch" style="background:#b2182b;"></span> Strong Republican (R+15 or more)</div>
@@ -112,7 +239,12 @@
         <calcite-block heading="Boundary Types" open>
           <div class="legend-items">
             <div class="legend-row"><span class="legend-line" style="border-color:#fff;"></span> District Boundary</div>
-            <div class="legend-row"><span class="legend-line" style="border-color:#ffd700; border-style:dashed;"></span> Contested Boundary</div>
+            <div class="legend-row"><span class="legend-line" style="border-color:#ffd700; border-style:dashed;"></span> Contested Boundary (CA, TX, NC)</div>
+          </div>
+        </calcite-block>
+        <calcite-block heading="Annotations" open>
+          <div class="legend-items">
+            <div class="legend-row"><span class="legend-dot pulse-gold"></span> Contested Hotspot</div>
           </div>
         </calcite-block>
       </calcite-panel>
@@ -136,7 +268,7 @@
   <calcite-dialog id="about-dialog" heading="About This Map" kind="brand" modal>
     <div class="about-content">
       <h3>The Great Mid-Decade Redistricting of 2026</h3>
-      <p>In an unusual move for 2026, several U.S. states are redrawing their congressional maps mid-decade. This interactive map visualizes how redistricting reshapes political representation at every scale, from statewide overviews down to individual streets.</p>
+      <p>In an unusual move for 2026, several U.S. states are redrawing their congressional maps mid-decade. This interactive map visualizes how redistricting reshapes political representation at every scale &mdash; from statewide overviews down to individual streets.</p>
 
       <calcite-notice open icon="lightbulb">
         <span slot="title">Why it matters</span>
@@ -147,23 +279,23 @@
       <ul>
         <li><strong>California (Prop 50)</strong> &mdash; Legislature-drawn map aims to shift House control</li>
         <li><strong>Texas</strong> &mdash; Redraws favor Republicans, sparking legal battles</li>
-        <li><strong>North Carolina</strong> &mdash; Reversed precedent enables partisan gerrymandering</li>
+        <li><strong>North Carolina</strong> &mdash; Reversed court precedent enables partisan gerrymandering</li>
       </ul>
 
       <h4>How to Use</h4>
       <ul>
-        <li>Click state buttons to zoom to focus areas</li>
-        <li>Click any district for demographic and political details</li>
-        <li>Zoom to street level to see boundary precision</li>
-        <li>Toggle layers and adjust opacity in the Layers panel</li>
+        <li><strong>Guided Tour</strong> &mdash; Take a 9-step narrative walkthrough</li>
+        <li><strong>Learn</strong> &mdash; Understand redistricting, gerrymandering, packing &amp; cracking</li>
+        <li><strong>Click any district</strong> &mdash; See partisan lean, redistricting impact, legal status</li>
+        <li><strong>Zoom to street level</strong> &mdash; See how a single block shift flips a district</li>
       </ul>
 
-      <p class="muted">Data: Esri Living Atlas, U.S. Census Bureau | Built with ArcGIS Maps SDK for JavaScript 5.0</p>
+      <p class="muted">Data: Esri Living Atlas (119th Congressional Districts), U.S. Census Bureau<br>Simulated partisan lean data for educational purposes<br>Built with ArcGIS Maps SDK for JavaScript 5.0</p>
     </div>
     <calcite-button slot="footer-end" appearance="outline-fill" icon-start="x" id="close-about">Close</calcite-button>
   </calcite-dialog>
 
-  <!-- ===== STREET-LEVEL TOOLTIP ===== -->
+  <!-- ===== STREET-LEVEL NOTICE ===== -->
   <div id="street-notice" class="street-notice" hidden>
     <calcite-notice open kind="warning" icon="zoom-in-fixed" scale="s" closable>
       <span slot="title">Street-Level Boundary</span>

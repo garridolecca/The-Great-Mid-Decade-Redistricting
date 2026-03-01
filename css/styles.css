@@ -16,13 +16,12 @@ body {
   color: var(--calcite-color-text-1, #fff);
 }
 
-/* === Calcite Shell fills viewport === */
 calcite-shell {
   height: 100vh;
   width: 100vw;
 }
 
-/* === Map Container === */
+/* === Map === */
 #viewDiv {
   flex: 1;
   height: 100%;
@@ -30,13 +29,27 @@ calcite-shell {
   min-height: 0;
 }
 
-/* === Header Styling === */
+/* === Header === */
 calcite-navigation {
   --calcite-color-brand: #1a1a2e;
 }
 
 calcite-navigation-logo {
   --calcite-color-text-1: #e8e8f0;
+}
+
+.header-stats {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.header-stats calcite-chip {
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .header-stats { display: none; }
 }
 
 /* === Panel Content === */
@@ -53,7 +66,7 @@ calcite-navigation-logo {
 
 .info-text {
   font-size: 13px;
-  line-height: 1.55;
+  line-height: 1.6;
   color: var(--calcite-color-text-2);
   margin: 4px 0 10px;
 }
@@ -61,6 +74,42 @@ calcite-navigation-logo {
 .info-text.muted {
   color: var(--calcite-color-text-3);
   font-style: italic;
+}
+
+/* === Mini Stats (State Cards) === */
+.state-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin: 10px 0 14px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  border: 1px solid var(--calcite-color-border-3);
+}
+
+.mini-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.mini-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--calcite-color-text-1);
+}
+
+.mini-value.dem { color: #67a9cf; }
+.mini-value.rep { color: #ef8a62; }
+
+.mini-label {
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--calcite-color-text-3);
+  margin-top: 2px;
 }
 
 /* === Legend === */
@@ -96,7 +145,190 @@ calcite-navigation-logo {
   flex-shrink: 0;
 }
 
-/* === District Detail (Right Panel) === */
+.legend-dot {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.pulse-gold {
+  background: rgba(255, 215, 0, 0.6);
+  box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4);
+  animation: pulseGold 2s infinite;
+}
+
+/* ========================================
+   GUIDED TOUR
+   ======================================== */
+.tour-intro {
+  text-align: center;
+  padding: 20px 8px;
+}
+
+.tour-intro calcite-icon {
+  color: var(--calcite-color-brand);
+  margin-bottom: 12px;
+}
+
+.tour-intro h3 {
+  margin: 0 0 10px;
+  font-size: 17px;
+  color: var(--calcite-color-text-1);
+}
+
+/* Step content */
+.tour-step-counter {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--calcite-color-text-3);
+  margin-bottom: 4px;
+}
+
+.tour-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 10px;
+  color: var(--calcite-color-text-1);
+  line-height: 1.3;
+}
+
+.tour-narrative {
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--calcite-color-text-2);
+  margin-bottom: 14px;
+}
+
+.tour-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 14px 0;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  border: 1px solid var(--calcite-color-border-3);
+}
+
+.tour-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.tour-stat-value {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--calcite-color-text-1);
+}
+
+.tour-stat-label {
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--calcite-color-text-3);
+  margin-top: 2px;
+}
+
+/* Progress */
+.tour-progress-track {
+  height: 3px;
+  background: var(--calcite-color-border-3);
+  margin: 0 12px 4px;
+}
+
+.tour-progress-fill {
+  height: 100%;
+  background: var(--calcite-color-brand);
+  transition: width 0.5s ease;
+  border-radius: 2px;
+  width: 0%;
+}
+
+/* Nav footer */
+.tour-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  gap: 8px;
+}
+
+.tour-step-label {
+  font-size: 12px;
+  color: var(--calcite-color-text-3);
+  font-weight: 600;
+}
+
+/* ========================================
+   LEARN: PACKING/CRACKING DIAGRAMS
+   ======================================== */
+.diagram-section {
+  margin: 12px 0 16px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  border: 1px solid var(--calcite-color-border-3);
+}
+
+.diagram-label {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0 0 6px;
+  color: var(--calcite-color-text-1);
+}
+
+.grid-diagram {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 8px 0;
+}
+
+.grid-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--calcite-color-text-3);
+  margin-top: 6px;
+  margin-bottom: 2px;
+}
+
+.grid-row {
+  display: flex;
+  gap: 3px;
+}
+
+.grid-cell {
+  width: 30px;
+  height: 28px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.2s ease;
+}
+
+.grid-cell:hover {
+  transform: scale(1.1);
+}
+
+.grid-cell.blue { background: #2166ac; }
+.grid-cell.red  { background: #b2182b; }
+
+.diagram-caption {
+  font-size: 11px;
+  color: var(--calcite-color-text-3);
+  font-style: italic;
+  margin: 8px 0 0;
+  line-height: 1.5;
+}
+
+/* ========================================
+   DISTRICT DETAIL (RIGHT PANEL)
+   ======================================== */
 #detail-content {
   padding: 8px;
 }
@@ -129,22 +361,106 @@ calcite-navigation-logo {
   color: var(--calcite-color-text-1);
 }
 
-.detail-value.dem {
+.detail-value.dem { color: #67a9cf; }
+.detail-value.rep { color: #ef8a62; }
+
+/* Lean bar */
+.lean-bar-container {
+  position: relative;
+  margin: 6px 0 4px;
+}
+
+.lean-bar {
+  height: 10px;
+  border-radius: 5px;
+  background: linear-gradient(to right, #2166ac 0%, #d1e5f0 35%, #f0f0f0 50%, #fddbc7 65%, #b2182b 100%);
+}
+
+.lean-indicator {
+  position: absolute;
+  top: -3px;
+  width: 4px;
+  height: 16px;
+  background: #fff;
+  border-radius: 2px;
+  transform: translateX(-50%);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+}
+
+.lean-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.lean-labels .dem { color: #67a9cf; }
+.lean-labels .rep { color: #ef8a62; }
+.lean-labels .lean-value { color: var(--calcite-color-text-1); }
+
+/* Shift indicator */
+.shift-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.shift-badge.shift-dem {
+  background: rgba(33, 102, 172, 0.2);
   color: #67a9cf;
 }
 
-.detail-value.rep {
+.shift-badge.shift-rep {
+  background: rgba(178, 24, 43, 0.2);
   color: #ef8a62;
 }
 
-.detail-bar {
-  height: 8px;
-  border-radius: 4px;
-  background: linear-gradient(to right, #2166ac var(--dem-pct), #b2182b var(--dem-pct));
-  margin: 4px 0 16px;
+.shift-badge.shift-none {
+  background: rgba(200, 200, 200, 0.1);
+  color: var(--calcite-color-text-3);
 }
 
-/* === About Dialog === */
+/* Redistricting impact section */
+.impact-section {
+  margin: 12px 0;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  border: 1px solid var(--calcite-color-border-3);
+}
+
+.impact-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--calcite-color-text-1);
+  margin-bottom: 8px;
+}
+
+.impact-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+  font-size: 12.5px;
+}
+
+.impact-row-label {
+  color: var(--calcite-color-text-3);
+}
+
+.impact-row-value {
+  font-weight: 600;
+  color: var(--calcite-color-text-2);
+}
+
+/* ========================================
+   ABOUT DIALOG
+   ======================================== */
 .about-content {
   max-width: 560px;
   line-height: 1.6;
@@ -160,9 +476,7 @@ calcite-navigation-logo {
   color: var(--calcite-color-text-1);
 }
 
-.about-content ul {
-  padding-left: 20px;
-}
+.about-content ul { padding-left: 20px; }
 
 .about-content li {
   margin-bottom: 4px;
@@ -176,7 +490,9 @@ calcite-navigation-logo {
   color: var(--calcite-color-text-3);
 }
 
-/* === Street-Level Notice (floating) === */
+/* ========================================
+   FLOATING NOTICES
+   ======================================== */
 .street-notice {
   position: fixed;
   bottom: 24px;
@@ -187,40 +503,25 @@ calcite-navigation-logo {
   max-width: 460px;
 }
 
-/* === Popup Overrides === */
-.esri-popup__main-container {
-  max-width: 320px;
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+@keyframes pulseGold {
+  0%   { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.5); }
+  70%  { box-shadow: 0 0 0 10px rgba(255, 215, 0, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
 }
 
-/* === Loading Spinner (shown during initial load) === */
-#loading-overlay {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #1a1a2e;
-  z-index: 9999;
-  transition: opacity 0.4s ease;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-#loading-overlay.hidden {
-  opacity: 0;
-  pointer-events: none;
+calcite-panel {
+  animation: fadeIn 0.2s ease;
 }
 
-/* === Responsive === */
-@media (max-width: 768px) {
-  calcite-shell-panel[slot="panel-end"] {
-    display: none;
-  }
-
-  .street-notice {
-    max-width: 90vw;
-  }
-}
-
-/* === Chip hover === */
+/* Chip hover */
 calcite-chip {
   cursor: pointer;
   transition: transform 0.15s ease;
@@ -230,20 +531,19 @@ calcite-chip:hover {
   transform: scale(1.02);
 }
 
-/* === Zoom indicator badge === */
-.zoom-badge {
-  position: fixed;
-  top: 70px;
-  right: 16px;
-  z-index: 50;
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 768px) {
+  calcite-shell-panel[slot="panel-end"] {
+    display: none;
+  }
+  .street-notice {
+    max-width: 90vw;
+  }
 }
 
-/* === Animation for panel transitions === */
-calcite-panel {
-  animation: fadeIn 0.2s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* Popup */
+.esri-popup__main-container {
+  max-width: 320px;
 }
